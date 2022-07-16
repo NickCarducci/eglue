@@ -27,7 +27,7 @@ pub async fn main() -> Result<Promise, JsValue> {
     let result: Promise = future_to_promise(Ship.await);
     Ok(result)
 }
-//https://github.com/rust-lang/rust/issues/67644
+//https://github.com/rust-lang/rust/issues/67644#issuecomment-1149898410
 
 /*
 struct Jship(Result<JsValue, JsValue>);
