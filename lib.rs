@@ -28,7 +28,7 @@ pub async fn main() -> Result<Promise, JsValue> {
     );
     Ok(result)
 }
-
+//https://github.com/rust-lang/rust/issues/67644
 
 /*
 struct Jship(Result<JsValue, JsValue>);
