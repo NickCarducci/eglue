@@ -12,8 +12,6 @@ use std::future::IntoFuture;
 use wasm_bindgen::JsValue;
 use wasm_bindgen_futures::future_to_promise;
 
-struct Jship(Result<JsValue, JsValue>);
-
 #[wasm_bindgen] 
 pub async fn main() -> Result<Promise, JsValue> {
     struct Ship;
@@ -32,7 +30,10 @@ pub async fn main() -> Result<Promise, JsValue> {
 }
 
 
-/*use wasm_bindgen::prelude::wasm_bindgen;
+/*
+struct Jship(Result<JsValue, JsValue>);
+
+use wasm_bindgen::prelude::wasm_bindgen;
 mod jfmast;
 
 struct Number(u8);
