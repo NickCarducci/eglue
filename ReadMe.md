@@ -13,6 +13,8 @@ eglue js by way of rust wasm bindgen (alpha)
 
 This can deploy to cloudflare service workers, PHP to (C++ to Rust)Build to `build/worker/shim.mjs` `format="module"`
 
+PATH="$PATH:$HOME/.cargo/bin" because `source` is not recognized, better actions have it `new terminal` effect
+
 `github/workflows/main.yml`:
 ````
 ...
