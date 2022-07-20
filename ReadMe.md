@@ -9,4 +9,4 @@ eglue js by way of rust wasm bindgen (alpha)
 3. Rust extension (ignore analyzer warning 7/11/2022)
 4. open a new Visual Studio (VS) code 
 
-[current](https://stackoverflow.com/questions/72954374/making-a-rust-wasm-bindgen-future-example-from-ccbuild)
+[futures try](https://stackoverflow.com/questions/72954374/making-a-rust-wasm-bindgen-future-example-from-ccbuild)
