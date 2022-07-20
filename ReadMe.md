@@ -16,17 +16,17 @@ This can deploy to cloudflare service workers, PHP to (C++ to Rust)Build to `bui
 `github/workflows/main.yml`:
 ````
 ...
-      - name: Publish
-        uses: cloudflare/wrangler-action@1.3.0
-        with:
-          email: "nmcarducci@gmail.com"
-          apiKey: ${{ secrets.CF_API_KEY }}
-          # apiToken: ${{ secrets.CF_API_TOKEN }}
-          preCommands: curl https://sh.rustup.rs -sSf | sh -s -- -y && PATH="$PATH:$HOME/.cargo/bin" && cargo install --git https://github.com/cloudflare/workers-rs --branch zeb/esbuild
-          postCommands: PATH="$PATH:$HOME/.cache/.wasm-pack/.wasm-bindgen-cargo-install-0.2.78/bin"
-          environment: "production"
-        env:
-          USER: root
+- name: Publish
+  uses: cloudflare/wrangler-action@1.3.0
+  with:
+    email: "nmcarducci@gmail.com"
+    apiKey: ${{ secrets.CF_API_KEY }}
+    # apiToken: ${{ secrets.CF_API_TOKEN }}
+    preCommands: curl https://sh.rustup.rs -sSf | sh -s -- -y && PATH="$PATH:$HOME/.cargo/bin" && cargo install --git https://github.com/cloudflare/workers-rs --branch zeb/esbuild
+    postCommands: PATH="$PATH:$HOME/.cache/.wasm-pack/.wasm-bindgen-cargo-install-0.2.78/bin"
+    environment: "production"
+  env:
+    USER: root
 ````
 
 testing...
