@@ -30,5 +30,12 @@ This can deploy to cloudflare service workers, PHP to (C++ to Rust)Build to `bui
   env:
     USER: root
 ````
+`wrangler.toml`
+````
+[build.upload]
+format = "modules" # "service-workers"
+dir = "build/worker" # dist for libraries...
+main = "./shim.mjs"
+````
 
 testing...
