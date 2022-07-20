@@ -1,0 +1,35 @@
+name: Mastercard BackBank for Vaumoney of Vaults.biz
+on:
+  release:
+    types:
+      - published
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2 #main
+      
+      - name: Navigate to repo
+        run: cd $GITHUB_WORKSPACE
+        
+      - name: Install latest nightly
+        uses: actions-rs/toolchain@v1
+        with:
+            toolchain: nightly
+            override: true
+            components: rustfmt, clippy
+          
+      - name: Publish
+        uses: cloudflare/wrangler-action@1.3.0
+        with:
+          email: "nmcarducci@gmail.com"
+          apiKey: ${{ secrets.CF_API_KEY }}
+          # apiToken: ${{ secrets.CF_API_TOKEN }}
+          preCommands: curl https://sh.rustup.rs -sSf | sh -s -- -y && PATH="$PATH:$HOME/.cargo/bin" && cargo install --git https://github.com/cloudflare/workers-rs --branch zeb/esbuild
+          postCommands: PATH="$PATH:$HOME/.cache/.wasm-pack/.wasm-bindgen-cargo-install-0.2.78/bin"
+          environment: "production"
+        env:
+          USER: root
