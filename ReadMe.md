@@ -36,6 +36,8 @@ This can deploy to cloudflare service workers, PHP to (C++ to Rust)Build to `bui
 format = "modules" # "service-workers"
 dir = "build/worker" # dist for libraries...
 main = "./shim.mjs"
+[build]
+command = "worker-build --release" 
 ````
 
 testing...
