@@ -5,7 +5,7 @@
 
 int main () {
   //puts("before");
-  fopen("./backbank.php", "r")
+  fopen("./backbank.php", "r");
   //puts("after");
   return 0;
 }
