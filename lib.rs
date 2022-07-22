@@ -2,8 +2,10 @@
 //"you'll need to define the Durable Object in a separate module. ...this:"
 //"https://github.com/cloudflare/workers-rs/blob/main/worker-sandbox/src/lib.rs"
 
-use std::sync::atomic::{AtomicBool, Ordering};//use wasm_bindgen::JsValue;
-use worker::{event, Env, Request, Response, Result, Router};//use web_sys::Url; //web_sys
+//use wasm_bindgen::JsValue;
+use std::sync::atomic::{AtomicBool, Ordering};
+//use web_sys::Url; //web_sys
+use worker::{/*Headers,RequestInit,*/event, Env, Request, Response, Result, Router};
 
 mod utils;
 mod index;
@@ -32,18 +34,21 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             //get, async move
             let namespace = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT")?;
             let stub = namespace.id_from_name("DurableObjectExample")?.get_stub()?;
-            //https://github.com/NickCarducci/mastercard-backbank/blob/main/lib.rs
-            match _req.url().ok() {
+            return match _req.url().ok() {
                 //Result.ok to Option
-                //Url::new(&url.host_str()
                 Some(url) => match url.host_str() {
                     //Option
-                    Some(url) => stub.fetch_with_str(url).await,
-                    None => Response::ok(format!("noope"))//eprintln!("noope"),
+                    Some(url) => match [ 
+                            "https://sausage.vau.money","https://vau.money","https://jwi5k.csb.app","https://i7l8qe.csb.app"//,"https://mastercard-backbank.backbank.workers.dev"
+                        ].iter().any(|&s| s == url) {
+                            true => stub.fetch_with_str(url).await,
+                            false => Response::ok(&("no access from ".to_owned()+url))//&format!("no access from ")
+                        },
+                    None => Response::ok(&("cannot host_str() ".to_owned()+""))//eprintln!("noope"),
                 },
-                None => Response::ok(format!("noope")),
-            }
-        })
+                None => Response::ok(&("cannot req.url() ".to_owned()+"")),
+            };
+        })//https://github.com/NickCarducci/mastercard-backbank/blob/main/lib.rs
         .run(req, env)
         .await
 }
