@@ -1,34 +1,28 @@
 //https://github.com/cloudflare/workers-rs/issues/94
 //"you'll need to define the Durable Object in a separate module. ...this:"
 //"https://github.com/cloudflare/workers-rs/blob/main/worker-sandbox/src/lib.rs"
+
+use std::sync::atomic::{AtomicBool, Ordering /*,Result as Resultt*/};
+
 use worker::{
     /*console_log, Headers,RequestInit, Fetch,*/ event, Env, Request, Response, Result, Router,
 };
 
 mod index;
-/*mod utils;
+mod utils;
 static GLOBAL_STATE: AtomicBool = AtomicBool::new(false);
 #[event(start)]
 pub fn start() {
     utils::set_panic_hook();
     // Change some global state so we know that we ran our setup function.
     GLOBAL_STATE.store(true, Ordering::SeqCst);
-}*/
-
-/*#[wasm_bindgen]
-pub fn handle(option:Option<String>) ->Resultt<webRes,worker::Error>  {
-    //let req: Request = req.dyn_into()?;
-    //let mut init = ResponseInit::new();
-    //init.status(200);
-    let option = option.as_deref();
-    return webRes::new_with_opt_str(option);//webRes::new_with_opt_str(None, &init);
-}*/
+}
 
 struct SomeSharedData {
     //data: u8, //regex::Regex,
 }
-
-#[event(fetch,respond_with_errors)]
+//https://github.com/rust-lang/rfcs/pull/2600; //https://github.com/rust-lang/rust/issues/23416, type ascription ob.key: Type=value
+#[event(fetch,respond_with_errors)] //#![feature(type_ascription)]//https://stackoverflow.com/questions/36389974/what-is-type-ascription
 pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
     fn origin_url(req_headers: &worker::Headers) -> std::string::String {
         return match req_headers.get("Origin").unwrap() {
@@ -39,7 +33,28 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     let info = SomeSharedData {
         //data: 0, //regex::Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap(),
     };
+
     let _result = Router::with_data(info) // if no data is needed, pass `()` or any other valid data
+        /*if (request.method === "OPTIONS")
+          return new Response(`preflight response for POST`, {
+            status: 200,
+            message: `preflight response for POST`,
+            headers: {
+              "Access-Control-Allow-Headers": [
+                //"Access-Control-Allow-Origin",
+                "Access-Control-Allow-Methods",
+                "Content-Type"
+                //"Origin",
+                //"X-Requested-With",
+                //"Accept"
+              ],
+              "Access-Control-Allow-Methods": ["POST", "OPTIONS"]
+            }
+          });
+        return await noException(request, env);*/
+          /*.options("/ *catchall", |_, ctx| {
+              Response::ok(ctx.param("catchall").unwrap())
+          })*/
         .options("/*catchall", |_, ctx| {
             Response::ok(ctx.param("catchall").unwrap())
         })
@@ -92,7 +107,6 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             return Response::error(&("get (method?) ".to_owned() + ""), 405);
         })
         .post_async("/", |_req, ctx| async move {
-            // https://developers.cloudflare.com/workers/platform/compatibility-dates#durable-object-stubfetch-requires-a-full-url
             let url: worker::Url = _req.url()?;
             return Response::ok(match url.host_str() {
                 None => "cannot host_str() ".to_owned() + "",
@@ -107,12 +121,12 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                             let _stub =
                                 namespace.id_from_name("DurableObjectExample")?.get_stub()?;
 
-                                /*let mut opts = RequestInit::new();
-                                opts.method("GET");
-                                opts.mode(RequestMode::Cors);
-                                let url =
-                                    format!("https://api.github.com/repos/{}/branches/master", repo);
-                                let request = Request::new_with_str_and_init(&url, &opts)?;
+                            /*let mut opts = RequestInit::new();
+                            opts.method("GET");
+                            opts.mode(RequestMode::Cors);
+                            let url =
+                                format!("https://api.github.com/repos/{}/branches/master", repo);
+                            let request = Request::new_with_str_and_init(&url, &opts)?;
 
                             request
                                 .headers()
