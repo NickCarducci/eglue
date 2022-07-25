@@ -34,8 +34,8 @@ new_classes = ["Require"]
 tag = "v3"
 deleted_classes = ["Require"]
 
-[vars]
-WORKERS_RS_VERSION = "0.0.9"
+# [vars]
+# WORKERS_RS_VERSION = "0.0.9"
 [build.upload]
 format = "modules" # "service-workers"
 dir = "build/worker" # dist for libraries...
