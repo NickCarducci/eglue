@@ -1,0 +1,14 @@
+{
+  "name": "eglue",
+  "collaborators": [
+    "Nick Carducci <nmcarducci@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "index_bg.wasm",
+    "index.js",
+    "index_bg.js"
+  ],
+  "module": "index.js",
+  "sideEffects": false
+}
