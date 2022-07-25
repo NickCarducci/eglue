@@ -11,7 +11,7 @@ eglue js by way of rust wasm bindgen (alpha)
 
 [futures try](https://stackoverflow.com/questions/72954374/making-a-rust-wasm-bindgen-future-example-from-ccbuild)
 
-This can deploy to cloudflare service workers, PHP to (C++ to Rust)Build to `build/worker/shim.mjs` `format="module"`
+This can (potentially) deploy to cloudflare service workers, PHP to (C++ to Rust)Build to `build/worker/shim.mjs` `format="module"`
 
 `PATH="$PATH:$HOME/.cargo/bin"` because `source` is not recognized, better `actions(github)` have it `new terminal` effect
 
