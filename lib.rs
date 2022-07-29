@@ -1,6 +1,56 @@
 //https://github.com/cloudflare/workers-rs/issues/94
 //"you'll need to define the Durable Object in a separate module. ...this:"
 //"https://github.com/cloudflare/workers-rs/blob/main/worker-sandbox/src/lib.rs"
+//use paste::paste;
+//use std::assert_matches::assert_matches;
+//#![feature(assert_matches)]
+#[macro_export]
+macro_rules! validreturn {
+    /*($typetype:ty) => {
+        paste! {
+          fn |<displaytype| (type:$typetype) -> String {return format!("{:?}", type)}
+        }
+    };*///https://stackoverflow.com/questions/53580165/is-it-possible-to-let-a-macro-expand-to-a-struct-field
+    //ty=>tt "expected expression, found `String`"
+    ($($type:tt, $assertion:ident),*) => {
+        //($()*) allows rule-in-rule
+            //https://veykril.github.io/tlborm/decl-macros/patterns/internal-rules.html
+    //fn displaytype (type:$type) -> String {return format!("{:?}", type)}
+
+    /*paste! {
+    fn |<ass T>| (type:$typetype) -> String {return std::any::type_name::<T>()}*/
+    //use super::displaytype;//https://www.tutorialspoint.com/super-and-self-keywords-in-rust-programming
+    //struct PotentialType<T>(T);
+        {
+           /* fn ass<T>(_: &T) -> String {
+                std::any::type_name::<T>().to_string()
+            } //https://stackoverflow.com/questions/27769681/should-i-implement-display-or-tostring-to-render-a-type-as-a-string
+            let erted = $(ass(&$assertion))*;
+            let displaytype = format!("{:?}", $($type)*); //eval_str($($type)*).unwrap());
+                                                        //fn validreturn(v: Any) -> $type {
+                                                        //https://stackoverflow.com/questions/32289605/how-do-i-write-a-wrapper-for-a-macro-without-repeating-the-rules
+                                                        //match /*displaytype(*/assert_eq!(displaytype , erted) {
+                                                        /*true => displaytype,
+                                                        false => "'validreturn': " + erted + " type begging: " + displaytype*/
+            match matches!(displaytype, erted) {
+                true => {
+                    console_log!("displaytype {}", displaytype);
+                    true
+                }
+                false => {
+                    //https://stackoverflow.com/questions/21747136/how-do-i-print-the-type-of-a-variable
+                    console_log!(
+                        "validreturn {}",
+                        "'validreturn': ".to_owned() + &erted + " type begging: " + &displaytype
+                    );
+                    false
+                }
+            }*/
+        }
+    //match v {//https://github.com/Metaswitch/assert-type-eq-rs/blob/master/src/lib.rs}
+    //}
+    };
+}
 
 // We're able to specify a start event that is called when the WASM is initialized before any
 // requests. This is useful if you have some global state or setup code, like a logger. This is
@@ -12,8 +62,14 @@ use std::sync::atomic::{AtomicBool, Ordering /*,Result as Resultt*/};
 //use wasm_bindgen_futures::ResponseInit; wrong
 //use web_sys::{ResponseInit,Response as webRes};
 
+//use url::{Url};
 use worker::{
-    /*console_log, Headers,RequestInit, Fetch,*/ event, Env, Request, Response, Result, Router,
+    /*console_log, Headers,RequestInit, Fetch,*/ event,
+    Env,
+    Request,
+    Response,
+    Result,
+    Router, //, Url,
 };
 
 mod index;
@@ -26,15 +82,6 @@ pub fn start() {
     GLOBAL_STATE.store(true, Ordering::SeqCst);
 }
 
-use serde::Serialize;
-#[derive(Serialize)]
-struct Product {
-    url: String,
-}
-#[derive(Serialize)]
-struct Error {
-    err: String,
-}
 struct SomeSharedData {
     //data: u8, //regex::Regex,
 }
@@ -111,53 +158,14 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                 false => Response::error(&("no access from ".to_owned() + &cors_origin), 403), //&format!("no access from ")
             };
         }) //https://community.cloudflare.com/t/fetch-post-type-error-failed-to-execute-function/311016/3?u=carducci
-        .post_async("/", |_req, ctx| async move {
-            //async may ask for pointer/(closure) with (1) both _[vars] like _req,_ctx, as well as (2) expression `return;`
-            /*UX for Post requests should enable textual resolutions
-             I would like to suggest a UX solution that would be least astonishing, and bring this into the workflow of your products in other facets,
-             or explain why errors
-
-            https://community.cloudflare.com/t/fetch-post-type-error-failed-to-execute-function/311016/3?u=carducci
-             */
-            //let url = Url::new(&_req.url()?)?;
-            //let url =  req.url()?;
-            //let mut res_headers = worker::Headers::new();
-            //return Response::ok(url.host_str())//.map(|resp| resp.with_headers(res_headers));;
-
-            /*return Response::from_json(&Product {
-                url: "stub.fetch_with_str(https://mastercard-backbank.backbank.workers.dev/).await"
-                    .to_string(),
-            });*/
-            /*return match req.url()?.host_str() {
-            None => Response::from_json(&Error {
-                err: "cannot _req.url()?.host_str()".to_string(),
-            }), //,505
-            //Option(resolution) => {explicit return; resolves in closure}
-            Some(url) => {*/
-            //Response::from_json(&Product{url: url.to_string()}) //.map(|resp| resp.with_headers(res_headers));;
-            //get, async move
+        .post_async("/", |req, ctx| async move {
             let binding = ctx.durable_object("EXAMPLE_CLASS_DURABLE_OBJECT");
-            return match binding.is_err() {
-                true => Response::error("EXAMPLE_CLASS_DURABLE_OBJECT is_err", 405),
-                false => {
-                    let namespace = binding?;
-                    let stub = namespace.id_from_name("DurableObjectExample")?.get_stub()?;
-                    stub.fetch_with_str("https://mastercard-backbank.backbank.workers.dev/")
-                        .await //this is not like fetching the resource again, just the stub
-                    /*A full URL must be used (when calling fetch on a Durable Object).
-                    Also, a wrangler.toml compatibility flag can opt-in to[ the otherwise] 
-                    [older behavior](https://developers.cloudflare.com/workers/platform/compatibility-dates#durable-object-stubfetch-requires-a-full-url).
-
-                    Astonishingly, I would have figured out to ask this sooner if Post requests could enable 
-                    [textual resolutions](https://community.cloudflare.com/t/fetch-post-type-error-failed-to-execute-function/311016/3?u=carducci).
-                    */
-                }
-            };
-            //}}
+            binding?
+                .id_from_name("DurableObjectExample")?
+                .get_stub()?
+                .fetch_with_request(req)
+                .await
         })
         .run(req, env)
-        .await// == Ok for Result<T> not return (hoist);
-        //https://stackoverflow.com/questions/60020738/expected-enum-stdresultresult-found
-              
-}
+        .await // == Ok for Result<T> not return (hoist); https://stackoverflow.com/questions/60020738/expected-enum-stdresultresult-found
 }
