@@ -45,3 +45,5 @@ testing...
 `curl https://sh.rustup.rs -sSf | sh -s -- -y && PATH="$PATH:$HOME/.cargo/bin" && cargo install --git https://github.com/cloudflare/workers-rs && cargo install --git https://github.com/cloudflare/workers-rs --branch zeb/esbuild && PATH="$PATH:$HOME/.cache/.wasm-pack/.wasm-bindgen-cargo-install-0.2.81/bin" && curl -L 'https://github.com/WebAssembly/binaryen/releases/download/version_90/binaryen-version_90-x86-linux.tar.gz' | tar  -xz && worker-build --release`
 
 ? catches unwind, durable object will send a log before throwing an exception on internal service error..
+
+console_log throws complacency but you always for now want "{}" first self arg-param,
