@@ -1,4 +1,4 @@
-[initial](https://github.com/NickCarducci/mastercard-backbank/tree/main/src/source/eglue/collagen/marrow)
+[initial](https://github.com/NickCarducci/mastercard-backbank/tree/main/src/source/eglue/collagen/marrow) - [final](https://github.com/NickCarducci/sausage)
 
 eglue js by way of rust wasm bindgen (alpha)
 
