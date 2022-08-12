@@ -1,4 +1,4 @@
-[initial](https://github.com/NickCarducci/mastercard-backbank/tree/main/src/source/eglue/collagen/marrow) - [final](https://github.com/NickCarducci/sausage)
+[initial](https://github.com/NickCarducci/mastercard-backbank/tree/main/src/source/eglue/collagen/marrow) - [final](https://github.com/NickCarducci/sausage) - [sandBox](https://community.cloudflare.com/t/using-authorization-credential-bearer-in-lieu-of-same-origin/409702)
 
 eglue js by way of rust wasm bindgen (alpha)
 
