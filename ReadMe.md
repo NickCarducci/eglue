@@ -48,7 +48,7 @@ testing...
 
 console_log throws complacency but you always for now want "{}" first self arg-param,
 
-activate
+activate wasm-bindgen
 
 ````
 [dependencies.web-sys]
