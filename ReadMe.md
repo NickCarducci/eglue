@@ -47,3 +47,10 @@ testing...
 ? catches unwind, durable object will send a log before throwing an exception on internal service error..
 
 console_log throws complacency but you always for now want "{}" first self arg-param,
+
+activate
+
+````
+[dependencies.web-sys]
+features = ["Response", "Request", "Url", "Window", "Document", "Body ] 
+````
